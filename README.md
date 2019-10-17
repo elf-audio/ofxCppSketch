@@ -2,7 +2,7 @@
 
 This is an openFrameworks wrapper for [cppsketch](https://github.com/elf-audio/ofxCppSketch.git), which allows you to auto-recompile just your ofApp without recompiling the whole project. The point of this is so that you can more easily sketch small ideas without having to wait too long to see the results of tweaking numbers.
 
-This only works on the mac for now, only tested with Xcode 11.
+This only works on the mac for now, only tested with Xcode 11. Click the image below to see a video of how to set it up.
 
 [![Video of how to set up ofxCppSketch](https://img.youtube.com/vi/UPIhMJ8_HOU/0.jpg)](https://www.youtube.com/watch?v=UPIhMJ8_HOU)
 

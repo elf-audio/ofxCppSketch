@@ -4,6 +4,8 @@ This is an openFrameworks wrapper for [cppsketch](https://github.com/elf-audio/o
 
 This only works on the mac for now, only tested with Xcode 11.
 
+[![Video of how to set up ofxCppSketch](https://img.youtube.com/vi/UPIhMJ8_HOU/0.jpg)](https://www.youtube.com/watch?v=UPIhMJ8_HOU)
+
 ## HOW TO USE
 1. Use project generator to add ofxCppSketch or drag its folder into an empty project
 2. Change your main.cpp to `#include "ofxCppSketch.h"`

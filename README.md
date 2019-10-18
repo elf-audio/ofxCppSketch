@@ -17,9 +17,7 @@ to
 4. Go into project build settings, find "Dead code stripping" - change it to NO
 
 Now, every time you save ofApp.h or ofApp.cpp whilst your app is running, it will recompile in the background - errors are displayed in the xcode console if compilation fails.
-<<<<<<< HEAD
+
 
 ## ADDONS
 Addons should work as long as they're listed in the addons.make file in the project folder. ofxCppSketch reads this to create header search paths for compilation.
-=======
->>>>>>> 1a98fefa7796f04c2fab84b60468a81ae3fc320d

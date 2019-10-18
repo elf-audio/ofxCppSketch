@@ -40,6 +40,10 @@ protected:
 		return srcDir.parent_path() / OF_PATH / "libs";
 
 	}
+	std::filesystem::path getAddonsPath() {
+		return srcDir.parent_path() / OF_PATH / "addons";
+
+	}
 	
 	std::filesystem::path getOfLibPath() {
 		return getLibsPath() / "openFrameworks";
@@ -76,9 +80,54 @@ protected:
 		includes.push_back(libsPathStr + "/utf8/include");
 		
 		includes.push_back(srcDir.string());
+		
+		auto addons = getAddonNames();
+		
+		for(const auto &addon : addons) {
+			auto addonPath = getAddonsPath() / addon;
+			vector<string> allAddonIncludes = getAllIncludeDirsForAddon(addonPath);
+			includes.insert(includes.end(), allAddonIncludes.begin(), allAddonIncludes.end());
+			
+		}
+		
 		return includes;
 	}
 	
+	bool isIncludePath(string path) {
+		int incPos = path.rfind("/include");
+		return (incPos==path.size()-8) ||
+		(incPos==path.size()-9 && path[path.size()-1]=='/');
+	}
+	
+	
+	vector<string> getAllIncludeDirsForAddon(const std::filesystem::path &addonPath) {
+		vector<string> includes;
+		includes.push_back((addonPath / "src").string());
+		// get all dirs recursively
+		auto allDirs = liveCodeUtils::getAllDirectories(addonPath.c_str());
+		for(const auto &dir: allDirs) {
+			if(isIncludePath(dir)) {
+				includes.push_back(dir);
+			}
+		}
+
+		return includes;
+	}
+	
+	vector<string> getAddonNames() {
+		// this reads the addons.make file for adding
+		// addon paths to the includes
+		std::ifstream infile((srcDir.parent_path() / "addons.make").string());
+		vector<string> addons;
+		std::string line;
+		while (std::getline(infile, line)) {
+			if(line.size()>3 && line!="ofxCppSketch") { // check there's some text on the line
+				addons.push_back(line);
+				printf("%s\n", line.c_str());
+			}
+		}
+		return addons;
+	}
 	
 	void update() override {
 		reloader.checkForChanges();

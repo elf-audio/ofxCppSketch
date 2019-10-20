@@ -10,6 +10,7 @@
 #include <chrono>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 using namespace std;
 namespace liveCodeUtils {

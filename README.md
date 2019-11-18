@@ -18,6 +18,9 @@ to
 
 Now, every time you save ofApp.h or ofApp.cpp whilst your app is running, it will recompile in the background - errors are displayed in the xcode console if compilation fails.
 
+## EXAMPLES
+There are two examples, "simple" and "audio" - "simple" is the most basic setup, "audio" is an example of doing live coding with both graphics and audio. 
+
 
 ## ADDONS
 Addons should work as long as they're listed in the addons.make file in the project folder. ofxCppSketch reads this to create header search paths for compilation.

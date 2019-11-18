@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ReloadableClass.h"
-
+#include "ReloadableSoundStream.h"
 /**
  * To make this work on xcode 11, you need to change a setting in your build settings, called "Dead code stripping" - change it to NO
  */
@@ -17,9 +17,16 @@ public:
 	}
 	
 	void setup() override {
+		reloader.reloadStarted = [this]() {
+			getSoundStream()->audioMutex.lock();
+			getSoundStream()->inCallback = nullptr;
+			getSoundStream()->outCallback = nullptr;
+		};
 		reloader.reloaded = [this](ofBaseApp *app) {
+			
 			liveApp = app;
 			liveApp->setup();
+			getSoundStream()->audioMutex.unlock();
 		};
 		
 		// the only thing you have to change in settings is "Dead Code Stripping"
@@ -31,8 +38,19 @@ public:
 		// start the auto-reloading
 		auto headerToPrecompile = getOfLibPath() / "ofMain.h";
 		reloader.init(pathToLiveFile.string(), includes, headerToPrecompile.string());
+		
+		// watch any other header files for changes, but not any .cpp files
+		// because that's too complicated for now
+		auto otherHeadersInSrc = liveCodeUtils::getAllHeaderFiles(srcDir.string());
+		for(auto header : otherHeadersInSrc) {
+			reloader.addFileToWatch(header);
+		}
 	}
 	
+	// I know this is bad, basically, the shared_ptr will be owned forever and never freed,
+	// but it's the format which oF wants.
+	static shared_ptr<ReloadableSoundStream> getSoundStream();
+
 protected:
 	
 	
@@ -121,7 +139,7 @@ protected:
 		vector<string> addons;
 		std::string line;
 		while (std::getline(infile, line)) {
-			if(line.size()>3 && line!="ofxCppSketch") { // check there's some text on the line
+			if(line.size()>3 /*&& line!="ofxCppSketch"*/) { // check there's some text on the line
 				addons.push_back(line);
 				printf("%s\n", line.c_str());
 			}

@@ -39,6 +39,7 @@ public:
 	FileWatcher watcher;
 	string path;
 	
+	function<void()> reloadStarted;
 	function<void(T*)> reloaded;
 	function<void()> willCloseDylib;
 	
@@ -77,6 +78,13 @@ public:
 		};
 	}
 	
+	// if you want to recompile this class when other files change
+	// (they might be dependents for this class) you can add them
+	// here manually.
+	void addFileToWatch(string path) {
+		watcher.watch(path);
+	}
+	
 	void checkForChanges() {
 		watcher.tick();
 	}
@@ -85,8 +93,11 @@ public:
 		int lastDot = p.rfind('.');
 		if(lastDot==-1) return "";
 		string cpp = p.substr(0, lastDot) + ".cpp";
-		printf("cpp file is at %s\n", cpp.c_str());
-		if(File(cpp).exists()) return cpp;
+		
+		if(File(cpp).exists()) {
+			printf("cpp file is at %s\n", cpp.c_str());
+			return cpp;
+		}
 		return "";
 	}
 	
@@ -108,7 +119,7 @@ private:
 
 		string dylibPath = cc();
 		if(dylibPath!="") {
-			
+			if(reloadStarted) reloadStarted();
 			auto *obj = loadDylib(dylibPath);
 			if(obj != nullptr) {
 				printf("\xE2\x9C\x85\xE2\x9C\x85\xE2\x9C\x85 Success loading \xE2\x9C\x85\xE2\x9C\x85\xE2\x9C\x85\n");
@@ -214,7 +225,6 @@ private:
 			if(willCloseDylib) willCloseDylib();
 			dylib.close();
 		}
-
 		if(!dylib.open(dylibPath)) {
 			return nullptr;
 		}

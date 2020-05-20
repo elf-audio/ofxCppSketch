@@ -15,6 +15,7 @@ to
 `ofRunApp(new ofxCppSketch("ofApp", __FILE__));`
 
 4. Go into project build settings, find "Dead code stripping" - change it to NO
+5. (Catalina only) go into "Signing and Capabilities" and tick "Disable Library Validation" under the "Hardened Runtime" section.
 
 Now, every time you save ofApp.h or ofApp.cpp whilst your app is running, it will recompile in the background - errors are displayed in the xcode console if compilation fails.
 

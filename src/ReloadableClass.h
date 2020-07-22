@@ -186,6 +186,8 @@ private:
 		outFile << "#include \""+objName+".h\"\n\n";
 		outFile << "extern \"C\" {\n\n";
 		outFile << "\n\nvoid *getPluginPtr() {return new "+objName+"(); };\n\n";
+		outFile << "}\n\n";
+
 		if(cppFile!="") {
 			// include the contents of the cpp file if it exists
 			ifstream inFile(cppFile);
@@ -199,8 +201,8 @@ private:
 				printf("Error reading %s\n", cppFile.c_str());
 			}
 		}
-		outFile << "}\n\n";
 		
+
 		outFile.close();
 	}
 	

@@ -27,3 +27,10 @@ There are two examples, "simple" and "audio" - "simple" is the most basic setup,
 Addons should work as long as they're listed in the addons.make file in the project folder. ofxCppSketch reads this to create header search paths for compilation.
 
 WARNING: If you use the project generator to add addons, then every time you do that, it will re-enable "Dead code stripping", so you need to turn that back on.
+
+## Custom project locations
+If you want to put your project in a different location other than the standard openframeworks/apps/(myfolder)/(myproject) way, you need to tell ofxCppSketch where the OF folder root is. The easiest way to do this is paste
+
+`GCC_PREPROCESSOR_DEFINITIONS = OF_ROOT=\"$(OF_PATH)\"`
+
+at the end of your project's Project.xcconfig file.

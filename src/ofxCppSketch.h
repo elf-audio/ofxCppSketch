@@ -205,6 +205,10 @@ private:
 	ofBaseApp *liveApp = nullptr;
 	string className;
 	std::filesystem::path srcDir;
-	std::filesystem::path OF_PATH = "../../..";
+	#ifdef OF_ROOT
+		std::filesystem::path OF_PATH = OF_ROOT;
+	#else
+		std::filesystem::path OF_PATH = "../../..";
+	#endif
 };
 
